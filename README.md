@@ -1,13 +1,13 @@
 # protobuf
 Producer/Consumer using protobuf and protobuf_nosr
 
-Python scripts to produce/consume events using both Google's Protobuf serialisation and Confluent's (appending the five bytes to the serialised event)
+Python scripts to produce/consume events using both Google's Protobuf serialisation and [Confluent's](https://docs.confluent.io/cloud/current/sr/fundamentals/serdes-develop/serdes-protobuf.html) (appending five bytes to the serialised event)
 
 By default, messages will be produced to the topics:
  - `data-sample-protobuf`: Confluent Protobuf serialisation
  - `data-sample-protobuf_nosr`: Google Protobuf serialisation
 
-The consumer will first try to deserialise using Confluent Protobuf serialisation, but in case of exception `SerializationError` (Unknown magic byte) will try Google's
+The consumer will first try to deserialise using Confluent Protobuf serialisation, but in case of exception `SerializationError` ([Unknown magic byte](https://www.confluent.io/en-gb/blog/how-to-fix-unknown-magic-byte-errors-in-apache-kafka)) will try Google's
 
 Protobuf schema (see file `user.proto`):
 ```
@@ -35,7 +35,7 @@ message User {
 
 ### Output examples
 
-#### Producer
+#### Producer (python3 protobuf_producer.py)
 ```
 ***Producing message using Confluent Serialiser (<protobuf>)***
 Topic: data-sample-protobuf
@@ -59,7 +59,7 @@ Payload:
 User record successfully produced to topic 'data-sample-protobuf_nosr': partition #0 at offset #34
 ```
 
-#### Consumer
+#### Consumer (python3 protobuf_consumer.py)
 ```
 Deserializer: <protobuf_nosr>
 Binary message value: b'\n\x0eAmanda Johnson\x10\x86H\x1a\x06yellow'
