@@ -1,4 +1,6 @@
-# protobuf (Producer/Consumer using protobuf and protobuf_nosr)
+# protobuf
+Producer/Consumer using protobuf and protobuf_nosr
+
 Python scripts to produce/consume events using both Google's Protobuf serialisation and Confluent's (appending the five bytes to the serialised event)
 
 By default, messages will be produced to the topics:
