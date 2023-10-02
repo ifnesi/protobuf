@@ -20,7 +20,7 @@ message User {
 }
 ```
 
-## Requirements:
+## Requirements
 - [Docker Desktop + Compose](https://www.docker.com/products/docker-desktop)
 - [librdkafka](https://github.com/confluentinc/librdkafka) (`brew install librdkafka`)
 - [Python 3.8+](https://www.python.org/downloads/)
