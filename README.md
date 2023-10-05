@@ -81,7 +81,7 @@ Binary message value: b'\x00\x00\x00\x00\x01\x00\n\x10Thomas Rodriguez\x10\x8d#\
 ```
 
 ### ksqlDB
-Protobuf serialised topics can also be ingested through ksqlDB (all credits here to the great [Luiz Roma](https://www.linkedin.com/in/luizroma/)).
+Protobuf serialised topics can also be ingested through ksqlDB (all credits here to the great [Luiz Roma](https://github.com/romajr)).
 1. First you need to access Confluent Control Center: http://localhost:9021/clusters/
 2. Select the cluster `controlcenter.cluster` (the only one on that docker compose file)
 3. On the left hand side menu select ksqlDB, the select the cluster `ksqldb1` (the only cluster on that docker compose file)
