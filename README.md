@@ -80,6 +80,64 @@ Binary message value: b'\x00\x00\x00\x00\x01\x00\n\x10Thomas Rodriguez\x10\x8d#\
 ------------------------
 ```
 
- ## :x: Stop the demo
-  - Press CTRL-C on the producer/consumer terminals
-  - Stop docker compose: ```docker-compose down```
+### ksqlDB
+Protobuf serialised topics can also be ingested through ksqlDB (all credits here to the great [Luiz Roma](https://www.linkedin.com/in/luizroma/)).
+1. First you need to access Confluent Control Center: http://localhost:9021/clusters/
+2. Select the cluster `controlcenter.cluster` (the only one on that docker compose file)
+3. On the left hand side menu select ksqlDB, the select the cluster `ksqldb1` (the only cluster on that docker compose file)
+4. The first tab will be the ksqlDB editor where you can ingest topic data, query them and create your streaming applications
+5. Make sure the `auto.offset.reset` option is set to `Earliest`
+
+#### Serialisers
+1. Confluent Protobuf serialisation:
+   - Enter the following query `CREATE STREAM deserialized_protobuf WITH (kafka_topic='data-sample-protobuf', value_format='protobuf');`
+   - Click `Run Query`
+   - If all goes well, you should see the confirmation message as shown below:
+```
+{
+  "@type": "currentStatus",
+  "statementText": "CREATE STREAM DESERIALIZED_PROTOBUF (NAME STRING, FAVORITE_NUMBER BIGINT, FAVORITE_COLOR STRING) WITH (CLEANUP_POLICY='delete', KAFKA_TOPIC='data-sample-protobuf', KEY_FORMAT='KAFKA', VALUE_FORMAT='PROTOBUF');",
+  "commandId": "stream/`DESERIALIZED_PROTOBUF`/create",
+  "commandStatus": {
+    "status": "SUCCESS",
+    "message": "Stream created",
+    "queryId": null
+  },
+  "commandSequenceNumber": 10,
+  "warnings": [
+
+  ]
+}
+```
+2. Google Protobuf serialisation: Note it will be required to use the value format `protobuf_nosr` as the data is serialised using the standard Google protobuf serialisation
+   - Enter the following query `CREATE STREAM deserialized_protobuf_nosr (name string, favorite_number int, favorite_color string) WITH (kafka_topic='data-sample-protobuf_nosr', value_format='protobuf_nosr');`
+   - Click `Run Query`
+   - If all goes well, you should see the confirmation message as shown below:
+```
+{
+  "@type": "currentStatus",
+  "statementText": "CREATE STREAM DESERIALIZED_PROTOBUF_NOSR (NAME STRING, FAVORITE_NUMBER INTEGER, FAVORITE_COLOR STRING) WITH (CLEANUP_POLICY='delete', KAFKA_TOPIC='data-sample-protobuf_nosr', KEY_FORMAT='KAFKA', VALUE_FORMAT='PROTOBUF_NOSR');",
+  "commandId": "stream/`DESERIALIZED_PROTOBUF_NOSR`/create",
+  "commandStatus": {
+    "status": "SUCCESS",
+    "message": "Stream created",
+    "queryId": null
+  },
+  "commandSequenceNumber": 12,
+  "warnings": [
+
+  ]
+}
+```
+
+To query the newly created streams, try:
+
+1. Confluent Protobuf serialisation: `select * from DESERIALIZED_PROTOBUF EMIT CHANGES;`
+![Confluent Protobuf serialisation](/docs/protobuf.png "Confluent Protobuf serialisation")
+
+2. Google Protobuf serialisation: `select * from DESERIALIZED_PROTOBUF_NOSR EMIT CHANGES;`
+![Google Protobuf serialisation](/docs/protobuf_nosr.png "Google Protobuf serialisation")
+
+## :x: Stop the demo
+ - Press CTRL-C on the producer/consumer terminals
+ - Stop docker compose: ```docker-compose down```
